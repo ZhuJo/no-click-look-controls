@@ -9,6 +9,8 @@ module.exports.Component = registerComponent('no-click-look-controls', {
 
   schema: {
     enabled: { default: true },
+    max-pitch: {default: 90},
+    max-yaw: {default: 720}
   },
 
   init: function () {
@@ -24,7 +26,6 @@ module.exports.Component = registerComponent('no-click-look-controls', {
   setupMouseControls: function () {
     this.canvasEl = document.querySelector('a-scene').canvas;
     // The canvas where the scene is painted
-    this.mouseDown = false;
     this.pitchObject = new THREE.Object3D();
     this.yawObject = new THREE.Object3D();
     this.yawObject.position.y = 10;
@@ -42,7 +43,6 @@ module.exports.Component = registerComponent('no-click-look-controls', {
     var canvasEl = document.querySelector('a-scene').canvas;
 
     // Mouse Events
-    canvasEl.addEventListener('mousedown', this.onMouseDown.bind(this), true);
     canvasEl.addEventListener('mousemove', this.onMouseMove.bind(this), true);
     canvasEl.addEventListener('mouseup', this.releaseMouse.bind(this), true);
     canvasEl.addEventListener('mouseout', this.releaseMouse.bind(this), true);
@@ -145,7 +145,7 @@ module.exports.Component = registerComponent('no-click-look-controls', {
     var yawObject = this.yawObject;
     var previousMouseEvent = this.previousMouseEvent;
 
-    if (!this.mouseDown || !this.data.enabled) { return; }
+    if (!this.data.enabled) { return; }
 
     var movementX = event.movementX || event.mozMovementX;
     var movementY = event.movementY || event.mozMovementY;
@@ -161,14 +161,7 @@ module.exports.Component = registerComponent('no-click-look-controls', {
     pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, pitchObject.rotation.x));
   },
 
-  onMouseDown: function (event) {
-    this.mouseDown = true;
-    this.previousMouseEvent = event;
-  },
 
-  releaseMouse: function () {
-    this.mouseDown = false;
-  },
 
   onTouchStart: function (e) {
     if (e.touches.length !== 1) { return; }
