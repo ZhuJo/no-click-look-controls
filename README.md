@@ -25,7 +25,7 @@ enabled       | true    | Enables controls
     <script src="https://aframe.io/releases/latest/aframe.js"></script>
 
     <!-- Component -->
-    <script src="aframe-gamepad-controls.js"></script>
+    <script src="no-click-look-controls.js"></script>
   </head>
   <body>
     <a-scene>
