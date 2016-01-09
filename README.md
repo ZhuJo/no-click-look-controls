@@ -6,7 +6,7 @@ Intuitive look controls for desktop 3D experiences. Demo: (coming soon) [alexrka
 ##Features
 * :no_entry_sign::arrow_left::arrow_right::no_entry_sign:Includes rotation angle options for dynamically focusing the user on parts of a scene.
 * :computer: Provides intuitive desktop view controls without requiring mousedown+drag. 
-* :100: Includes the standard touch and HMD view controls for drop-in replacement for standard 'look-controls' component.
+* :100::sunglasses::iphone: Includes the standard touch and HMD view controls for drop-in replacement for standard `look-controls` component.
 
 ##Options
 
