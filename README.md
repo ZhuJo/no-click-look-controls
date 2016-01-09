@@ -13,7 +13,7 @@ Intuitive look controls for desktop 3D experiences. Demo: (coming soon) [alexrka
 Property      | Default | Description
 --------------|---------|-------------
 maxyaw        | 3π      | Controls the max y-axis rotation. Actual max viewing angle is twice the parameter, ie 3π          is 3π to the right and 3π to the left.
-maxpitch      | π/2     | Controls the max x-axis rotation. Actual max viewing angle is twice the parameter, ie π/2 is π/2 to the right and π/2 to the left.
+maxpitch      | π/2     | Controls the max x-axis rotation. Actual max viewing angle is twice the parameter, ie π/2 is π/2 up and π/2 down.
 enabled       | true    | Enables controls
 
 ##Usage
