@@ -1,16 +1,78 @@
-var registerComponent = require('../core/component').registerComponent;
+/******/ (function(modules) { // webpackBootstrap
+/******/  // The module cache
+/******/  var installedModules = {};
+
+/******/  // The require function
+/******/  function __webpack_require__(moduleId) {
+
+/******/    // Check if module is in cache
+/******/    if(installedModules[moduleId])
+/******/      return installedModules[moduleId].exports;
+
+/******/    // Create a new module (and put it into the cache)
+/******/    var module = installedModules[moduleId] = {
+/******/      exports: {},
+/******/      id: moduleId,
+/******/      loaded: false
+/******/    };
+
+/******/    // Execute the module function
+/******/    modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/    // Flag the module as loaded
+/******/    module.loaded = true;
+
+/******/    // Return the exports of the module
+/******/    return module.exports;
+/******/  }
+
+
+/******/  // expose the modules object (__webpack_modules__)
+/******/  __webpack_require__.m = modules;
+
+/******/  // expose the module cache
+/******/  __webpack_require__.c = installedModules;
+
+/******/  // __webpack_public_path__
+/******/  __webpack_require__.p = "";
+
+/******/  // Load entry module and return exports
+/******/  return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+
+  // Browser distrubution of the A-Frame component.
+  (function (AFRAME) {
+    if (!AFRAME) {
+      console.error('Component attempted to register before AFRAME was available.');
+      return;
+    }
+
+    (AFRAME.aframeCore || AFRAME).registerComponent('no-click', __webpack_require__(1));
+
+  }(window.AFRAME));
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+
+
 var THREE = require('../../lib/three');
 
 // To avoid recalculation at every mouse movement tick
 var PI_2 = Math.PI / 2;
 
-module.exports.Component = registerComponent('no-click-look-controls', {
+module.exports = {
   dependencies: ['position', 'rotation'],
 
   schema: {
     enabled: { default: true },
-    max-pitch: {default: 90},
-    max-yaw: {default: 720}
+    maxpitch: {default: PI_2},
+    maxyaw: {default: PI_2 * 6}
   },
 
   init: function () {
@@ -26,6 +88,7 @@ module.exports.Component = registerComponent('no-click-look-controls', {
   setupMouseControls: function () {
     this.canvasEl = document.querySelector('a-scene').canvas;
     // The canvas where the scene is painted
+    this.hovering = false;
     this.pitchObject = new THREE.Object3D();
     this.yawObject = new THREE.Object3D();
     this.yawObject.position.y = 10;
@@ -44,9 +107,8 @@ module.exports.Component = registerComponent('no-click-look-controls', {
 
     // Mouse Events
     canvasEl.addEventListener('mousemove', this.onMouseMove.bind(this), true);
-    canvasEl.addEventListener('mouseup', this.releaseMouse.bind(this), true);
-    canvasEl.addEventListener('mouseout', this.releaseMouse.bind(this), true);
-
+    canvasEl.addEventListener('mouseout', this.onMouseOut.bind(this), true);
+    canvasEl.addEventListener('mouseover'.this.onMouseOver.bind(this), true);
     // Touch events
     canvasEl.addEventListener('touchstart', this.onTouchStart.bind(this));
     canvasEl.addEventListener('touchmove', this.onTouchMove.bind(this));
@@ -140,28 +202,35 @@ module.exports.Component = registerComponent('no-click-look-controls', {
     this.zeroQuaternion.setFromEuler(euler);
   },
 
-  onMouseMove: function (event) {
-    var pitchObject = this.pitchObject;
-    var yawObject = this.yawObject;
-    var previousMouseEvent = this.previousMouseEvent;
+  getMousePosition: function(event) {
+    var canvasEl = this.canvasEl;
+    var rect = canvasEl.getBoundingClientRect();
 
-    if (!this.data.enabled) { return; }
-
-    var movementX = event.movementX || event.mozMovementX;
-    var movementY = event.movementY || event.mozMovementY;
-
-    if (movementX === undefined || movementY === undefined) {
-      movementX = event.screenX - previousMouseEvent.screenX;
-      movementY = event.screenY - previousMouseEvent.screenY;
-    }
-    this.previousMouseEvent = event;
-
-    yawObject.rotation.y -= movementX * 0.002;
-    pitchObject.rotation.x -= movementY * 0.002;
-    pitchObject.rotation.x = Math.max(-PI_2, Math.min(PI_2, pitchObject.rotation.x));
+    // Returns a value from -100 to 100 for X and Y representing the percentage of the max-yaw and max-pitch from the center of the canvas
+    // -100 is far left or top, 100 is far right or bottom
+    return {x: -2 * (50 - event.clientX - rect.left), y: -2 * (50 - event.clientY - rect.top)};
   },
 
+  onMouseMove: function (event) {
+    var pos = getMousePosition(event);
+    var x = pos.x;
+    var y = pos.y;
+    var pitchObject = this.pitchObject;
+    var yawObject = this.yawObject;
 
+    if (!this.hovering || !this.data.enabled) { return; }
+
+    yawObject.rotation.y = this.maxyaw * x;
+    pitchObject.rotation.x = this.maxpitch * y;
+  },
+
+  onMouseOver: function (event) {
+    this.hovering = true;
+  },
+
+  onMouseOut: function (event) {
+    this.hovering = false;
+  },
 
   onTouchStart: function (e) {
     if (e.touches.length !== 1) { return; }
@@ -188,4 +257,6 @@ module.exports.Component = registerComponent('no-click-look-controls', {
   onTouchEnd: function () {
     this.touchStarted = false;
   }
-});
+};
+},
+]);
