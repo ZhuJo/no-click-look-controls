@@ -47,7 +47,7 @@ Register `aframe-no-click-look-controls` component.
 
 ```javascript
 var AFRAME = require('aframe-core');
-var GamepadControls = require('aframe-no-click-look-controls');
+var NoClickLookControls = require('aframe-no-click-look-controls');
 AFRAME.registerComponent('no-click-look-controls', NoClickLookControls);
 ```
 
