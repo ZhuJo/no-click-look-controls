@@ -1,7 +1,10 @@
 # A-Frame `no-click-look-controls` Component
 
 ##Overview
-Intuitive look controls for desktop 3D experiences. Demo: (coming soon) [alexrkass.com/no-click-look-controls](https://alexrkass.com/no-click-look-controls)
+Intuitive look controls for desktop 3D experiences. 
+
+##Demo: 
+[https://alexrkass.github.io/no-click-example/](https://alexrkass.github.io/no-click-example/)
 
 ##Features
 * :no_entry_sign::arrow_left::arrow_right::no_entry_sign:Includes rotation angle options for dynamically focusing the user on parts of a scene.
